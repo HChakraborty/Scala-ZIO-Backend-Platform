@@ -2,13 +2,13 @@
 
 A simple CLI-based calculator application built using Scala and ZIO, demonstrating functional programming concepts, typed error handling, and service-oriented design.
 
----
+
 
 ## Overview
 
 This project parses and evaluates user input from the command line in the form of a single arithmetic expression. It validates input, applies calculation logic, and outputs results while handling errors in a functional and type-safe way.
 
----
+
 
 ## Features
 
@@ -20,7 +20,7 @@ This project parses and evaluates user input from the command line in the form o
 - Handles errors using typed domain models
 - Clean separation between services and repository
 
----
+
 
 ## Architecture
 
@@ -31,7 +31,7 @@ This project parses and evaluates user input from the command line in the form o
 - **CalculatorError** → Typed domain error modeling
 - **Operation** → Domain model representing a single calculation
 
----
+
 
 ## Concepts Demonstrated
 
@@ -44,7 +44,7 @@ This project parses and evaluates user input from the command line in the form o
 - Separation of concerns (service vs repository)
 - Basic parsing without overengineering
 
----
+
 
 ## Supported Input
 
@@ -61,7 +61,7 @@ Valid examples:
 
 ```
 
----
+
 
 ## Invalid Input Examples
 
@@ -77,7 +77,6 @@ Valid examples:
 
 These will result in appropriate error messages.
 
----
 
 ## Example Flow
 
@@ -91,7 +90,7 @@ These will result in appropriate error messages.
 4. Calculation is performed
 5. Result is printed
 
----
+
 
 ## Running the Project
 
@@ -99,12 +98,12 @@ These will result in appropriate error messages.
 sbt run
 ````
 
----
+
 ## Sample Output
 
 ![CLI Output](docs/cli-output.png)
 
----
+
 
 ## Design Decisions
 
@@ -113,7 +112,6 @@ sbt run
 * Unary minus (`-`) is supported for negative numbers
 * Operator parsing is handled manually instead of using complex regex or parser libraries
 
----
 
 ## What I Learned
 
