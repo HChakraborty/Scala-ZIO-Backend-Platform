@@ -18,10 +18,10 @@ final class CalculatorRepositoryLive extends CalculatorRepository:
 
     override def supportedOperators: UIO[Set[Char]] =
         ZIO.succeed(Operators.symbols)
-
+        
     override def isOperatorSupported(operator: Char): UIO[Boolean] = 
         ZIO.succeed(Operators.symbols.contains(operator))
 
-object CalculatorRepositoryLayer:
+object CalculatorRepositoryLive:
     val layer: ULayer[CalculatorRepository] = 
         ZLayer.succeed(new CalculatorRepositoryLive)

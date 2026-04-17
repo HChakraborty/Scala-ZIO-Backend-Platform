@@ -14,6 +14,6 @@ final class PrintServiceLive extends PrintService:
     override def printLine(value: String): IO[IOException, Unit] =
         Console.printLine(value)
 
-object PrintServiceLayer:
+object PrintServiceLive:
     val layer: ULayer[PrintService] =
         ZLayer.succeed(new PrintServiceLive)

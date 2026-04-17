@@ -8,38 +8,39 @@ import clicalculator.domain.CalculatorError
 import clicalculator.repository._
 import clicalculator.service._
 
-object main extends ZIOAppDefault:
-    private val appLayers = 
-        CalculatorRepositoryLayer.layer >+>
+object Main extends ZIOAppDefault:
+    private val appLayers =
+        CalculatorRepositoryLive.layer >+>
         CalculatorServiceLayer.layer >+>
-        PrintServiceLayer.layer
+        PrintServiceLive.layer
 
-    def loop: ZIO[CalculatorService & PrintService, IOException, Unit] = 
+    def loop: ZIO[CalculatorService & PrintService, IOException, Unit] =
         for
             _ <- PrintService.printLine("")
             _ <- PrintService.printLine("Enter expression:")
             input <- Console.readLine
-            
+
             trimmed = input.trim
 
-            - <- 
-                if trimmed.equalsIgnoreCase("exit") then PrintService.printLine("Goodbye!")
+            _ <-
+                if trimmed.equalsIgnoreCase("exit") then
+                    PrintService.printLine("Goodbye!")
                 else
                     for
-                        _ <- 
+                        _ <-
                             CalculatorService
                                 .evaluate(trimmed)
                                 .foldZIO(
-                                    error => 
+                                    error =>
                                         PrintService.printLine(s"Error: ${CalculatorErrorHandler.toMessage(error)}"),
                                     result =>
                                         PrintService.printLine(s"Result: ${result}")
                                 )
                         _ <- loop
                     yield ()
-        
-        yield()
-                                
+
+        yield ()
+
 
     val program: ZIO[CalculatorService & PrintService, IOException, Unit] =
         for
@@ -47,9 +48,8 @@ object main extends ZIOAppDefault:
             _ <- PrintService.printLine("CLI Calculator")
             _ <- PrintService.printLine(s"Supported operators: ${operators.mkString(" ")}")
             _ <- PrintService.printLine("Type expression like: 10 + 5")
-            _ <- PrintService.printLine("Type 'exit' to quit" )
-            - <- loop
-            
+            _ <- PrintService.printLine("Type 'exit' to quit")
+            _ <- loop
         yield ()
 
     override def run: ZIO[Any, Any, Any] =

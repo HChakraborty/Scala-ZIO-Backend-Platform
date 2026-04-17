@@ -20,7 +20,7 @@ object CalculatorService:
     def evaluate(input: String): ZIO[CalculatorService, CalculatorError, BigDecimal] =
         ZIO.serviceWithZIO[CalculatorService](_.evaluate(input))
 
-    def getSupportedOperators: ZIO[CalculatorService, Nothing, Set[Char]] = 
+    def getSupportedOperators: ZIO[CalculatorService, Nothing, Set[Char]] =
         ZIO.serviceWithZIO[CalculatorService](_.getSupportedOperators)
 
 final class CalculatorServiceLive(
@@ -29,7 +29,7 @@ final class CalculatorServiceLive(
     override def parse(input: String): IO[CalculatorError, BinaryOperation] =
         for
             trimmed <- ZIO.succeed(input.trim)
-            _ <- if input.isEmpty then ZIO.fail(EmptyInput)
+            _ <- if trimmed.isEmpty then ZIO.fail(EmptyInput)
                 else ZIO.unit
 
             tuple <- extractParts(trimmed)
@@ -44,20 +44,20 @@ final class CalculatorServiceLive(
         yield BinaryOperation(left, operator, right)
 
     override def calculate(operation: BinaryOperation): IO[CalculatorError, BigDecimal] =
+        val left = operation.left
+        val right = operation.right
+
         operation.operator match
-            case '+' => ZIO.succeed(operation.left + operation.right)
-            case '-' => ZIO.succeed(operation.left - operation.right)
-            case '*' => ZIO.succeed(operation.left * operation.right)
+            case '+' => ZIO.succeed(left + right)
+            case '-' => ZIO.succeed(left - right)
+            case '*' => ZIO.succeed(left * right)
             case '/' =>
-                if operation.right == 0 then ZIO.fail(DivisionByZero)
-                else ZIO.succeed(operation.left / operation.right)
+                if right == 0 then ZIO.fail(DivisionByZero)
+                else ZIO.succeed(left / right)
             case _ => ZIO.fail(InvalidOperator)
 
     override def evaluate(input: String): IO[CalculatorError, BigDecimal] =
-        for
-            operation <- parse(input)
-            result <- calculate(operation)
-        yield result
+        parse(input).flatMap(calculate)
 
     override def getSupportedOperators: UIO[Set[Char]] =
         repository.supportedOperators
@@ -65,17 +65,17 @@ final class CalculatorServiceLive(
     private def isUnaryMinus(input: String, index: Int): Boolean =
         if input(index) != '-' then false
         else
-            val previousNonSpace = 
+            val previousNonSpace =
                 input.substring(0, index).reverse.dropWhile(_.isWhitespace).headOption
 
             previousNonSpace match
-                case None =>
+                case None => 
                     true
-                case Some(ch) =>
+                case Some(ch) => 
                     Operators.symbols.contains(ch)
-            
-    private def extractParts(input: String): IO[CalculatorError, (String, Char, String)] = 
-        val operatorIndexes = 
+
+    private def extractParts(input: String): IO[CalculatorError, (String, Char, String)] =
+        val operatorIndexes =
             input.zipWithIndex.collect {
                 case (ch, index)
                     if Operators.symbols.contains(ch)
@@ -92,11 +92,11 @@ final class CalculatorServiceLive(
 
                 if leftRaw.isEmpty || rightRaw.isEmpty then ZIO.fail(InvalidExpression)
                 else ZIO.succeed((leftRaw, operator, rightRaw))
-            
+
             case _ =>
                 ZIO.fail(InvalidExpression)
 
-    private def parseNumber(value: String): IO[CalculatorError, BigDecimal] = 
+    private def parseNumber(value: String): IO[CalculatorError, BigDecimal] =
         ZIO.
             attempt(BigDecimal(value))
             .mapError(_ => InvalidNumber)
@@ -105,3 +105,4 @@ object CalculatorServiceLayer:
     val layer: URLayer[CalculatorRepository, CalculatorService] =
         ZLayer.fromFunction(new CalculatorServiceLive(_))
 
+        
