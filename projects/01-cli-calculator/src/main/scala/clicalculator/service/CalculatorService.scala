@@ -60,7 +60,7 @@ final class CalculatorServiceLive(
         parse(input).flatMap(calculate)
 
     override def getSupportedOperators: UIO[Set[Char]] =
-        repository.supportedOperators
+        repository.getSupportedOperators
 
     private def isUnaryMinus(input: String, index: Int): Boolean =
         if input(index) != '-' then false
