@@ -33,8 +33,10 @@ This project parses and evaluates user input from the command line in the form o
 
 
 
-## Concepts Demonstrated
+## What I learned
 
+- Scala syntax
+- Pure vs Non pure functions
 - `ZIO[R, E, A]` effect model
 - Typed error handling using `sealed trait`
 - Functional composition using `for` comprehension
@@ -43,7 +45,6 @@ This project parses and evaluates user input from the command line in the form o
 - Dependency injection using `ZLayer`
 - Separation of concerns (service vs repository)
 - Basic parsing without overengineering
-
 
 
 ## Supported Input
@@ -111,16 +112,5 @@ sbt run
 * Does **not support chained operations or parentheses** (intentional to avoid overengineering)
 * Unary minus (`-`) is supported for negative numbers
 * Operator parsing is handled manually instead of using complex regex or parser libraries
-
-
-## What I Learned
-
-* How to structure backend logic using services and repositories
-* How to model errors explicitly instead of relying on exceptions
-* How to use ZIO for effectful computations
-* How dependency injection works using ZLayer
-* How to separate business logic from I/O
-* How to implement a simple parser with edge case handling (negative numbers, spacing)
-* Why parsing logic becomes complex as features increase
 
 
