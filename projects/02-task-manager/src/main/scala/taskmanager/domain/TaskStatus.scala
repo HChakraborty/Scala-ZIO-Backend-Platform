@@ -1,4 +1,4 @@
-package clitaskmanager.domain
+package taskmanager.domain
 
 sealed trait TaskStatus
 

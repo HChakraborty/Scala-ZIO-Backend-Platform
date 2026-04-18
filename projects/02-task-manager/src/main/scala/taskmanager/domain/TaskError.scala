@@ -1,4 +1,4 @@
-package clitaskmanager.domain
+package taskmanager.domain
 
 sealed trait TaskError
 
@@ -6,7 +6,6 @@ case object EmptyTitle extends TaskError
 case object InvalidTaskId extends TaskError
 case object TaskNotFound extends TaskError
 case object InvalidCommand extends TaskError
-case object TasksNotFound extends TaskError
 
 object TaskError:
     def toMessage(error: TaskError): String =
@@ -15,4 +14,3 @@ object TaskError:
             case InvalidCommand => "Invalid command!"
             case InvalidTaskId => "Task id must be a valid number!"
             case TaskNotFound => "Task not found!"
-            case TasksNotFound => "No tasks found!"

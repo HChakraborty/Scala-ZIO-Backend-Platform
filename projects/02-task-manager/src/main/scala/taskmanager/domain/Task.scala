@@ -1,4 +1,4 @@
-package clitaskmanager.domain
+package taskmanager.domain
 
 final case class Task(
     id: Int,
