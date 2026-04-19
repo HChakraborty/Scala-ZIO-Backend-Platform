@@ -6,5 +6,8 @@ scalaVersion := "3.3.7"
 
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio" % "2.0.21",
-  "dev.zio" %% "zio-test" % "2.0.21" % Test
+  "dev.zio" %% "zio-test" % "2.0.21" % Test,
+  "dev.zio" %% "zio-test-sbt" % "2.0.21" % Test
 )
+
+testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
