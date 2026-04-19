@@ -1,12 +1,11 @@
-# Task Manager API (ZIO)
+# Task Manager API
 
-A simple REST API built using Scala and ZIO, evolving from an initial CLI-based application into an HTTP service, and later extended with background processing, concurrency, and resilience patterns.
+A simple REST API built by evolving from CLI-based application (check GitHub history) into an HTTP service.
 
 ## Overview
 
-This project started similar to [CLI Calculator](../01-cli-calculator/README.md), then evolved into a web API using ZIO HTTP.
+This project started similar to [CLI Calculator](../01-cli-calculator/README.md), then evolved into a web API using ZIO HTTP and later we added some concurrency concepts and automated tests.
 
-The goal was to move beyond basic request/response flows into more realistic asynchronous backend behavior.
 
 ## Features
 
@@ -15,7 +14,7 @@ The goal was to move beyond basic request/response flows into more realistic asy
 * Get task → `GET /api/tasks/{id}`
 * Update task (mark as completed) → `PATCH /api/tasks/{id}`
 * Delete task → `DELETE /api/tasks/{id}`
-* Complete multiple tasks in parallel → `POST /api/tasks/complete-batch`
+* Complete multiple tasks concurrently → `PATCH /api/tasks/complete-batch`
 * Health check → `GET /api/health`
 
 ## Architecture
@@ -23,10 +22,12 @@ The goal was to move beyond basic request/response flows into more realistic asy
 * **Main** → Server startup, dependency wiring, background worker lifecycle
 * **Routes** → HTTP endpoint definitions
 * **Handlers** → Request parsing and response mapping
-* **Service** → Business logic + task event publishing + Notification Service
+* **Service** → Business logic + task event publishing + notification triggering
 * **Repository** → In-memory state using `Ref`
 * **Event Processor** → Background fiber consuming task events
 * **Domain** → Core models, typed errors, task events
+* **Tests** → Basic service and repository specs using ZIO Test
+
 
 ## What I learned
 
@@ -34,53 +35,56 @@ The goal was to move beyond basic request/response flows into more realistic asy
 * Handling request parsing and validation in handlers
 * Converting domain errors into HTTP responses
 * Working with JSON codecs (`JsonEncoder` / `JsonDecoder`)
-* Structuring applications with HTTP, service, and repository layers
-* Managing effect types (`ZIO[R, E, A]`) across layers
-* Keeping core business logic independent from transport (CLI → HTTP)
 * Using a background fiber to process task events asynchronously
-* Running parallel task updates with `foreachPar`
+* Running concurrent task updates with `foreachPar`
 * Applying retry strategies using `Schedule`
-* Managing shared in-memory state safely with `Ref`
+* Managing in-memory state safely with `Ref`
 * Handling startup and shutdown of background workers with `forkScoped`
 * Extending a CRUD API with event-driven processing patterns
-
+* Writing simple automated tests with ZIO Test for service and repository layers
 
 ## Example Request
 
-```bash id="yvxikp"
+```bash
 curl -X POST http://localhost:8080/api/tasks ^
   -H "Content-Type: application/json" ^
   -d "{\"title\":\"Test task\"}"
-```
+````
 
 ## Batch Completion Example
 
-```bash id="yvxikp"
+```bash
 curl -X PATCH http://localhost:8080/api/tasks/complete-batch ^
--H "Content-Type: application/json" ^ 
--d "{\"ids\":[1,2]}"
- ``` 
+  -H "Content-Type: application/json" ^
+  -d "{\"ids\":[1,2]}"
+```
 
 ## Running the Project
 
-```bash id="0wz50w"
+```bash
 sbt run
 ```
 
 Server runs at:
 
-```id="xy5fcm"
+```text
 http://localhost:8080
+```
+
+## Running Tests
+
+```bash
+sbt test
 ```
 
 ## Notes
 
-* Uses in-memory storage (no database)
+* Uses in-memory storage (no database, as of yet, will expand in another project)
 * IDs are auto-incremented
 * Update operation marks a task as completed
 * Task completion triggers background event processing
 * Notification sending retries on simulated failure
-* Designed to learn progression from CLI → API → concurrency patterns
+
 
 ## Tech Stack
 
@@ -88,4 +92,6 @@ http://localhost:8080
 * ZIO
 * ZIO HTTP
 * zio-json
+* ZIO Test
 * sbt
+
