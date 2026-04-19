@@ -1,16 +1,16 @@
 # Scala ZIO Backend
 
-A collection of backend-focused Scala projects built using **ZIO**, demonstrating functional programming, state management, typed error handling, and layered backend architecture.
+A collection of backend-focused Scala projects built using **ZIO**, demonstrating functional programming, typed error handling, layered architecture, HTTP APIs, and practical concurrency patterns.
 
 ## Overview
 
-This repository contains multiple independent projects, each focused on a specific backend concept and built progressively from simple CLI applications to HTTP APIs.
+This repository contains multiple independent projects, each focused on specific backend concepts and built progressively from simple CLI applications to web APIs with asynchronous processing.
 
 The goal is to build a strong foundation in functional backend development using modern Scala patterns and practical system design.
 
 ## Projects
 
-```text
+```text id="9wx9g2"
 projects/
 ├── 01-cli-calculator/
 ├── 02-task-manager-api/
@@ -31,6 +31,9 @@ projects/
 * In-memory state using `Ref`
 * Service + repository + HTTP layering
 * Domain errors mapped to HTTP responses
+* Background event processing with fibers
+* Retry logic using `Schedule`
+* Parallel batch task updates
 
 ## Concepts Covered
 
@@ -42,6 +45,10 @@ projects/
 * In-memory state management using `Ref`
 * Request / response handling with ZIO HTTP
 * JSON encoding / decoding with `zio-json`
+* Background processing using fibers
+* Parallel workflows with `foreachPar`
+* Retry policies with `Schedule`
+* Resource lifecycle management
 
 ---
 
@@ -59,21 +66,21 @@ projects/
 
 Each project is standalone.
 
-```bash
+```bash id="wq8grm"
 cd projects/01-cli-calculator
 sbt run
 ```
 
 or
 
-```bash
+```bash id="pkh7x4"
 cd projects/02-task-manager-api
 sbt run
 ```
 
 ## Goal
 
-To design and implement backend systems using functional programming and modern Scala patterns, progressing from CLI applications to structured web APIs.
+To design and implement backend systems using functional programming and modern Scala patterns, progressing from CLI applications to structured web APIs with practical concurrency patterns.
 
 ## Author
 
