@@ -30,4 +30,8 @@ object TaskRoutes:
             Method.DELETE / Root / "api" / "tasks" / string("id") -> handler { (idText: String, _: Request) =>
                 TaskHttpHandlers.deleteTaskById(idText)
             },
+
+            Method.PATCH / Root / "api" / "tasks" / "complete-batch" -> handler { (request: Request) =>
+                TaskHttpHandlers.completeTasksBatch(request)
+            }
         )

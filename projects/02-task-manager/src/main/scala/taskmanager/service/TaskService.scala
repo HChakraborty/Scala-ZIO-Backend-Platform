@@ -9,6 +9,7 @@ trait TaskService:
     def getTaskById(id: Int): IO[TaskError, Task]
     def updateTaskById(id: Int): IO[TaskError, Task]
     def deleteTaskById(id: Int): IO[TaskError, Unit]
+    def completeTasksBatch(ids: List[Int]): IO[TaskError, List[Task]]
 
 object TaskService:
     def addTask(title: String): ZIO[TaskService, TaskError, Task] =
@@ -25,4 +26,7 @@ object TaskService:
     
     def deleteTaskById(id: Int): ZIO[TaskService, TaskError, Unit] =
         ZIO.serviceWithZIO[TaskService](_.deleteTaskById(id)) 
+
+    def completeTasksBatch(ids: List[Int]): ZIO[TaskService, TaskError, List[Task]] =
+        ZIO.serviceWithZIO[TaskService](_.completeTasksBatch(ids)) 
 

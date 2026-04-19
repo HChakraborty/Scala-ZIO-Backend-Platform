@@ -81,6 +81,20 @@ object TaskHttpHandlers:
                         )
             )
 
+    def completeTasksBatch(request: Request): ZIO[TaskService, Nothing, Response] =
+        decodeBody[CompleteBatchRequest](request).foldZIO(
+            errorResponse =>
+                ZIO.succeed(errorResponse),
+            batchRequest =>
+                TaskService.completeTasksBatch(batchRequest.ids).fold(
+                    error => HttpErrorMapper.toResponse(error),
+                    tasks =>
+                        HttpUtils.jsonResponse(
+                            tasks.map(TaskResponse.fromDomain)
+                        )
+                )
+        )
+
     private def parseId(idText: String): IO[TaskError, Int] =
         ZIO
             .attempt(idText.trim.toInt)
